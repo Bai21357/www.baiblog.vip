@@ -1,5 +1,5 @@
 ---
-title: Markdown以及LaTeX学习记录
+title: Markdown记录
 published: 2026-01-01
 description: '记录'
 tags: [Web]
@@ -85,7 +85,10 @@ https://www.baiblog.vip/
 一只图片
 ![图](https://ts1.tc.mm.bing.net/th/id/R-C.a1aa2c340f263b44ce1ba3aa7f502ace?rik=BX6NP64mVEqgtw&riu=http%3a%2f%2fimgapp.yeyou.com%2fapp%2fuploads%2fimages%2fcompany%2f2015%2f03%2f14268436099670.png&ehk=4ob5a9mbEqr1JFFDKhF7sOr53FEILc1DC5OHZdHKZ3Q%3d&risl=&pid=ImgRaw&r=0 "bilibili")
 
-*斜体* **加粗**  `printf()` , <u>下划线</u>, :smile:, $\theta=x^2$
+*斜体* **加粗**  `printf()` , <u>下划线</u> 
+:smile:
+$\theta=x^2$
+:joy:
 
 
 
