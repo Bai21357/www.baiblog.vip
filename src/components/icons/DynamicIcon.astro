@@ -1,0 +1,77 @@
+---
+// src/components/icons/DynamicIcon.astro
+
+interface Props {
+    name: string;
+    class?: string;
+    size?: string;
+}
+
+const { name, class: className, size = '4' } = Astro.props;
+
+// 定义类型
+type SvgModule = () => Promise<string>;
+type SvgModules = Record<string, SvgModule>;
+
+// 获取所有SVG文件
+const svgModules = import.meta.glob(
+    '../../assets/icons/*.svg',
+    {
+        as: 'raw',
+        eager: false
+    }
+) as SvgModules;
+
+// 安全的类型转换
+const iconPaths: Record<string, SvgModule> = {};
+
+for (const path in svgModules) {
+    if (Object.prototype.hasOwnProperty.call(svgModules, path)) {
+        const fileName = path.split('/').pop();
+        if (fileName && fileName.endsWith('.svg')) {
+            const iconName = fileName.slice(0, -4); // 移除 .svg 扩展名
+            iconPaths[iconName] = svgModules[path];
+        }
+    }
+}
+
+// 默认SVG
+const defaultSvg = `<svg class="w-${size} h-${size}" fill="currentColor" viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" stroke="currentColor" fill="none"/>
+</svg>`;
+
+let iconContent = defaultSvg;
+
+// 安全的图标访问
+const loadIcon = async (iconName: string): Promise<string> => {
+    const loader = iconPaths[iconName];
+    if (loader) {
+        try {
+            return await loader();
+        } catch (error) {
+            console.warn(`加载图标 "${iconName}" 失败:`, error);
+            return defaultSvg;
+        }
+    }
+    console.warn(`图标 "${iconName}" 未找到`);
+    return defaultSvg;
+};
+
+// 加载图标
+if (name) {
+    const svgText = await loadIcon(name);
+    iconContent = svgText.replace(
+        /<svg([^>]*)>/,
+        `<svg$1 class="w-${size} h-${size} ${className || ''}">`
+    );
+}
+---
+{iconContent && <span class="icon-wrapper" set:html={iconContent} />}
+
+<style>
+    .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

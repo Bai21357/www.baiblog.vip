@@ -1,3 +1,35 @@
-# 关于
+# 关于我
 
-个人主页 [Bili](https://space.bilibili.com/1634994344)
+  个人主页 [Bili](https://space.bilibili.com/1634994344)
+
+  一只很屑的在校生啦
+  
+# 关于网站
+
+本网站域名于24年启用(主站)
+
+原本是一个基于wordpress构建的网站
+
+~~结果由于某些原因她夕了~~
+
+于是就有了现在的这个网站
+
+
+已启用域名
+
+
+    baiblog.vip(托管到Cloudflare)
+
+    021357.xyz(托管到EdgeOne)
+ 
+    213578848.xyz(托管到Cloudflare)
+
+#  注：
+
+  对网站有任何问题,请与我联系 
+  
+  [QQ](http://wpa.qq.com/msgrd?v=3&uin=2603555958&site=qq&menu=yes)
+  或
+  [T.me](https://t.me/bai21357)
+
+![](https://im.213578848.xyz/webban.png)

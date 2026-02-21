@@ -22,6 +22,7 @@ enum I18nKey {
 	postsCount = "postsCount",
 
 	themeColor = "themeColor",
+	panelOpacity = "panelOpacity",
 
 	lightMode = "lightMode",
 	darkMode = "darkMode",

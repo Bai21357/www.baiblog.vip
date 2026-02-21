@@ -1,0 +1,421 @@
+---
+import Icon from "../icons/DynamicIcon.astro";
+import I18nKey from "../../i18n/i18nKey";
+import { i18n } from "../../i18n/translation";
+import ButtonLink from "../control/ButtonLink.astro";
+import WidgetLayout from "./WidgetLayout.astro";
+
+const externalLinks = [
+    {
+        name: "Cloudflare优选",
+        url: "https://baiblog.vip/",
+        id: "cloudflare-optimized",  // 修改为唯一ID
+        icon: "cloudflare"
+    },
+    {
+        name: "Cloudflare国际",
+        url: "https://www.213578848.xyz/",
+        id: "cloudflare-international",  // 修改为唯一ID
+        icon: "cloudflare"
+    },
+    {
+        name: "Tencentcloud国际",
+        url: "https://www.021357.xyz/",  // 修复重复的 http://
+        id: "tencentcloud",
+        icon: "tencentcloud"
+    },
+];
+
+const COLLAPSED_HEIGHT = "7.5rem";
+const isCollapsed = externalLinks.length > 10;
+
+interface Props {
+    class?: string;
+    style?: string;
+}
+const className = Astro.props.class;
+const style = Astro.props.style;
+---
+<WidgetLayout
+        name="节点选择"
+        id="external-links"
+        isCollapsed={isCollapsed}
+        collapsedHeight={COLLAPSED_HEIGHT}
+        class={className}
+        style={style}
+>
+    <div class="space-y-1.5">
+        {externalLinks.map((link) => {
+            const domain = new URL(link.url).hostname;
+            const predefinedLatency = {
+                'baiblog.vip': 100,           // Cloudflare优选
+                'www.213578848.xyz': 120,     // Cloudflare国际
+                'www.021357.xyz': 150         // Tencentcloud国际
+            }[domain] || null;
+
+            return (
+                    <div
+                            class="group flex items-center justify-between p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-all duration-200 latency-item"
+                            data-link-id={link.id}
+                            data-url={link.url}
+                    >
+                        <!-- 左侧：网站信息 -->
+                        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                            <Icon
+                                    name={link.icon}
+                                    class="text-base opacity-70 group-hover:opacity-100 transition-opacity"
+                                    size="4"
+                            />
+                            <ButtonLink
+                                    url={link.url}
+                                    badge=""
+                                    label={`访问 ${link.name}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="!p-0 !bg-transparent hover:!bg-transparent flex-1 min-w-0"
+                            >
+              <span class="truncate text-sm text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100">
+                {link.name.trim()}
+              </span>
+                            </ButtonLink>
+                        </div>
+
+                        <!-- 右侧：延迟指示器 -->
+                        <div class="flex items-center gap-1.5 ml-2">
+                            <!-- 延迟圆点指示器 -->
+                            <div class="relative">
+                                <div
+                                        class="w-2 h-2 rounded-full opacity-80 group-hover:opacity-100 transition-all duration-300 latency-dot"
+                                        id={`dot-${link.id}`}
+                                        data-latency={predefinedLatency || 0}
+                                ></div>
+                                <!-- 脉冲动画光环 -->
+                                <div class="absolute inset-0 w-2 h-2 rounded-full animate-ping opacity-20 latency-pulse" style="animation-duration: 1s;"></div>
+                            </div>
+
+                            <!-- 延迟数值 -->
+                            <div
+                                    class="latency-value text-xs font-medium min-w-[3.5rem] text-right transition-all duration-300"
+                                    id={`latency-${link.id}`}
+                            >
+                                {predefinedLatency ? `~${predefinedLatency}ms` : '--'}
+                            </div>
+                        </div>
+                    </div>
+            );
+        })}
+    </div>
+</WidgetLayout>
+
+<!-- 优化后的测速逻辑 -->
+<script is:inline>
+    (function() {
+        // 延迟测试配置 - 使用实际的链接
+        const links = [
+            { url: 'https://baiblog.vip/', id: 'cloudflare-optimized' },
+            { url: 'https://www.213578848.xyz/', id: 'cloudflare-international' },
+            { url: 'https://www.021357.xyz/', id: 'tencentcloud' }
+        ];
+
+        // 颜色配置
+        const latencyColors = {
+            fast: {
+                dot: 'bg-green-500',
+                text: 'text-green-600 dark:text-green-400',
+                shadow: 'shadow-[0_0_8px_rgba(34,197,94,0.3)]'
+            },
+            medium: {
+                dot: 'bg-yellow-500',
+                text: 'text-yellow-600 dark:text-yellow-400',
+                shadow: 'shadow-[0_0_8px_rgba(234,179,8,0.3)]'
+            },
+            slow: {
+                dot: 'bg-red-500',
+                text: 'text-red-600 dark:text-red-400',
+                shadow: 'shadow-[0_0_8px_rgba(239,68,68,0.3)]'
+            },
+            unknown: {
+                dot: 'bg-gray-400',
+                text: 'text-gray-600 dark:text-gray-400',
+                shadow: ''
+            }
+        };
+
+        // 获取延迟等级
+        function getLatencyLevel(latency) {
+            if (latency < 0) return 'unknown';
+            if (latency < 200) return 'fast';
+            if (latency < 400) return 'medium';
+            return 'slow';
+        }
+
+        // 更新UI显示
+        function updateLatencyDisplay(linkId, latency, isTesting = false) {
+            const dotElement = document.getElementById(`dot-${linkId}`);
+            const valueElement = document.getElementById(`latency-${linkId}`);
+
+            if (!dotElement || !valueElement) return;
+
+            if (isTesting) {
+                // 测试中的状态
+                dotElement.className = `w-2 h-2 rounded-full bg-blue-500 animate-pulse ${latencyColors.fast.shadow}`;
+                valueElement.textContent = '测试中';
+                valueElement.className = `latency-value text-xs font-medium min-w-[3.5rem] text-right text-blue-600 dark:text-blue-400`;
+                return;
+            }
+
+            const level = getLatencyLevel(latency);
+            const colors = latencyColors[level];
+
+            // 更新圆点
+            dotElement.className = `w-2 h-2 rounded-full ${colors.dot} ${colors.shadow} transition-all duration-500`;
+            dotElement.dataset.latency = latency;
+
+            // 更新数值
+            const displayText = latency >= 0 ? `${latency}ms` : '--';
+            valueElement.textContent = displayText;
+            valueElement.className = `latency-value text-xs font-medium min-w-[3.5rem] text-right ${colors.text}`;
+
+            // 添加数值变化动画
+            valueElement.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                valueElement.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // 优化的延迟测试函数 - 增强错误处理
+        async function testLatency(url, linkId) {
+            return new Promise((resolve) => {
+                // 立即显示测试中状态
+                updateLatencyDisplay(linkId, -1, true);
+
+                const startTime = performance.now();
+                let completed = false;
+                let timeoutId;
+
+                // 方法1: 使用fetch API尝试连接
+                const tryFetch = () => {
+                    if (completed) return;
+
+                    fetch(url, {
+                        method: 'HEAD',
+                        mode: 'no-cors',
+                        cache: 'no-cache',
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    }).then(() => {
+                        if (!completed) {
+                            completed = true;
+                            clearTimeout(timeoutId);
+                            const latency = Math.round(performance.now() - startTime);
+                            resolve({ latency, linkId, url });
+                        }
+                    }).catch(() => {
+                        // fetch失败，尝试其他方法
+                        tryImage();
+                    });
+                };
+
+                // 方法2: 使用Image对象加载小图片
+                const tryImage = () => {
+                    if (completed) return;
+
+                    const img = new Image();
+                    // 使用更可靠的测试URL
+                    const testUrl = `${url}?ping=${Date.now()}&_=${Math.random()}`;
+
+                    img.onload = img.onerror = () => {
+                        if (!completed) {
+                            completed = true;
+                            clearTimeout(timeoutId);
+                            const latency = Math.round(performance.now() - startTime);
+                            resolve({ latency, linkId, url });
+                        }
+                    };
+
+                    // 设置超时，防止图片长时间加载
+                    setTimeout(() => {
+                        if (!completed) {
+                            img.src = ''; // 停止加载
+                        }
+                    }, 1500);
+
+                    img.src = testUrl;
+                };
+
+                // 设置总超时
+                timeoutId = setTimeout(() => {
+                    if (!completed) {
+                        completed = true;
+                        const latency = Math.round(performance.now() - startTime);
+                        resolve({ latency: 3000, linkId, url });
+                    }
+                }, 2500);
+
+                // 立即开始测试
+                tryFetch();
+            });
+        }
+
+        // 优化的并行测速 - 逐个测试，避免并发限制
+        async function autoSpeedTest() {
+            console.log('开始自动测速...');
+
+            for (let i = 0; i < links.length; i++) {
+                const link = links[i];
+
+                // 延迟500ms后测试下一个，避免同时发起太多请求
+                setTimeout(async () => {
+                    await testLatency(link.url, link.id).then(result => {
+                        updateLatencyDisplay(result.linkId, result.latency);
+                    });
+                }, i * 500);
+            }
+
+            console.log('自动测速调度完成');
+        }
+
+        // 单个链接悬停时测试
+        function setupHoverTesting() {
+            document.querySelectorAll('.latency-item').forEach(element => {
+                let isTesting = false;
+                let lastTestTime = 0;
+                const TEST_COOLDOWN = 15000; // 增加到15秒冷却
+
+                element.addEventListener('mouseenter', () => {
+                    const now = Date.now();
+                    if (isTesting || (now - lastTestTime < TEST_COOLDOWN)) return;
+
+                    const linkId = element.dataset.linkId;
+                    const url = element.dataset.url;
+
+                    isTesting = true;
+                    lastTestTime = now;
+
+                    // 立即开始测试
+                    testLatency(url, linkId).then(result => {
+                        updateLatencyDisplay(result.linkId, result.latency);
+                        isTesting = false;
+                    }).catch(() => {
+                        isTesting = false;
+                    });
+                });
+            });
+        }
+
+        // 优化的初始化函数
+        function initAutoSpeedTest() {
+            // 1. 立即显示预定义数据
+            links.forEach(link => {
+                const domain = new URL(link.url).hostname;
+                const predefined = {
+                    'baiblog.vip': 100,
+                    'www.213578848.xyz': 120,
+                    'www.021357.xyz': 150
+                }[domain];
+
+                if (predefined) {
+                    updateLatencyDisplay(link.id, predefined);
+                } else {
+                    updateLatencyDisplay(link.id, -1);
+                }
+            });
+
+            // 2. 延迟1秒后开始测速，让页面完全加载
+            setTimeout(() => {
+                autoSpeedTest();
+            }, 1000);
+
+            // 3. 设置悬停测试功能
+            setupHoverTesting();
+
+            // 4. 每1分钟自动重新测速一次
+            setInterval(autoSpeedTest, 60 * 1000);
+        }
+
+        // 页面加载检测
+        function checkPageReady() {
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(initAutoSpeedTest, 100);
+            } else {
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(initAutoSpeedTest, 100);
+                });
+
+                // 备用：如果DOMContentLoaded未触发，3秒后强制初始化
+                setTimeout(initAutoSpeedTest, 3000);
+            }
+        }
+
+        // 启动
+        checkPageReady();
+    })();
+</script>
+
+<style>
+    /* 优化动画速度 */
+    @keyframes ping {
+        75%, 100% {
+            transform: scale(1.5);
+            opacity: 0;
+        }
+    }
+
+    @keyframes pulse-subtle {
+        0%, 100% {
+            opacity: 0.3;
+        }
+        50% {
+            opacity: 0.6;
+        }
+    }
+
+    .animate-ping {
+        animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+
+    .latency-pulse {
+        animation: pulse-subtle 1.5s ease-in-out infinite;
+    }
+
+    .latency-dot {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 0 0 transparent;
+    }
+
+    .latency-dot:hover {
+        transform: scale(1.2);
+    }
+
+    /* 延迟数值字体样式 */
+    .latency-value {
+        transition: all 0.2s ease;
+        letter-spacing: -0.01em;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    /* 响应式优化 */
+    @media (max-width: 768px) {
+        .latency-value {
+            font-size: 0.7rem;
+            min-width: 3rem;
+        }
+
+        .latency-dot {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+
+    /* 暗色模式优化 */
+    @media (prefers-color-scheme: dark) {
+        .latency-dot {
+            opacity: 0.9;
+        }
+
+        .latency-dot:hover {
+            opacity: 1;
+        }
+    }
+</style>
