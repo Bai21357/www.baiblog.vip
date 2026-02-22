@@ -1,13 +1,18 @@
 ---
-title: 记录
-published: 2024-12-14
+title: 置顶帖
+published: 2099-12-14
 description: '记录'
 tags: [Web]
 category: '记录'
 draft: false
 ---
-# 本文章为记录贴
-不定时更新？
+# 终末地太好玩了哈哈哈
+![zmd](https://im.213578848.xyz/zmd47.png)
+
+
+## 本网站资源下载站
+
+https://re.213578848.xyz/
 
 ## markdown教程
 https://markdown.com.cn/
@@ -29,9 +34,8 @@ https://cover.keaeye.com/
 
 #  记事本本
 
-- [ ] 网站自动/手动分流(优化三网路线)
-- [ ] ch341a
+### 无
 
 
-###  网易云音乐(听会歌吧)
+###  网易云音乐
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=4&id=1484121017&auto=0&height=430"></iframe>
