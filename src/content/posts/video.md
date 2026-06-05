@@ -6,9 +6,8 @@ tags: [Web]
 category: '记录'
 draft: false
 ---
-# 终末地太好玩了哈哈哈
-![zmd](https://im.213578848.xyz/zmd47.png)
-
+# 6.21
+## <p>使用本站前请先查看<a href="/disclaimer/">免责声明</a>.</p>
 
 ## 本网站资源下载站
 
@@ -33,9 +32,8 @@ https://cf.090227.xyz/
 https://cover.keaeye.com/
 
 #  记事本本
+## 终末地太好玩了哈哈哈
 
-### 无
+![](https://im.213578848.xyz/zmd47.png)
 
-
-###  网易云音乐
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=4&id=1484121017&auto=0&height=430"></iframe>
+### END
