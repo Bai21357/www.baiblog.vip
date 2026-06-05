@@ -9,6 +9,17 @@ draft: false
 # 6.21
 ## <p>使用本站前请先查看<a href="/disclaimer/">免责声明</a>.</p>
 
+### 添加友链请在github提交pr
+ 位置 src/pages/friends.astro
+ 
+    {
+     title: '名字',
+    imgurl: 'https://xxxx.xx/xx.png',
+    desc: 'saying(可更改)',
+    siteurl: '你的链接',
+    tags: ['Friends'],
+    },
+
 ## 本网站资源下载站
 
 https://re.213578848.xyz/
@@ -32,8 +43,10 @@ https://cf.090227.xyz/
 https://cover.keaeye.com/
 
 #  记事本本
-## 终末地太好玩了哈哈哈
-
 ![](https://im.213578848.xyz/zmd47.png)
+
+![](https://im.213578848.xyz/1780619411.png)
+
+
 
 ### END
