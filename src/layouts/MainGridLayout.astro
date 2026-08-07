@@ -1,91 +1,124 @@
 ---
+import BackToTop from "@components/control/BackToTop.astro";
+import Footer from "@components/Footer.astro";
+import Navbar from "@components/Navbar.astro";
+import SideBar from "@components/widget/SideBar.astro";
+import type { MarkdownHeading } from "astro";
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "../components/misc/ImageWrapper.astro";
+import TOC from "../components/widget/TOC.astro";
+import { siteConfig } from "../config";
+import {
+    BANNER_HEIGHT,
+    BANNER_HEIGHT_EXTEND,
+    MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
+} from "../constants/constants";
 import Layout from "./Layout.astro";
-import NavBar from "@/components/NavBar.astro";
-import Footer from "@/components/Footer.astro";
-import Toc from "@/components/Toc.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import SiteInfo from "@/components/SiteInfo.astro";
-import type { CollectionEntry } from "astro:content";
 
-export interface Props {
-  title?: string;
-  description?: string;
-  lang?: string;
-  banner?: string;
-  setOGTypeArticle?: boolean;
-  headings?: any[];
-  post?: CollectionEntry<"posts">;
+interface Props {
+    title?: string;
+    banner?: string;
+    description?: string;
+    lang?: string;
+    setOGTypeArticle?: boolean;
+    headings?: MarkdownHeading[];
 }
 
 const {
-  title,
-  description,
-  lang = "zh-CN",
-  banner,
-  setOGTypeArticle = false,
-  headings = [],
-  post,
+    title,
+    banner,
+    description,
+    lang,
+    setOGTypeArticle,
+    headings = [],
 } = Astro.props;
+const hasBannerCredit =
+    siteConfig.banner.enable && siteConfig.banner.credit.enable;
+const hasBannerLink = !!siteConfig.banner.credit.url;
 
-import siteConfig from "@/config";
-const h1Text = title || siteConfig.title;
-
-const jsonLd = post ? {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: post.data.title,
-  description: post.data.description || siteConfig.description,
-  datePublished: post.data.published,
-  dateModified: post.data.updated || post.data.published,
-  author: {
-    "@type": "Person",
-    name: siteConfig.author.name,
-    url: siteConfig.author.url,
-  },
-  image: post.data.coverImage || siteConfig.banner?.src,
-  url: Astro.url.href,
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.title,
-    logo: {
-      "@type": "ImageObject",
-      url: siteConfig.logo?.src,
-    },
-  },
-} : null;
+// Use a CSS variable for main panel top so we can change it responsively.
+const mainPanelTop = "5.5rem";
 ---
 
-<Layout
-  title={title}
-  description={description}
-  lang={lang}
-  banner={banner}
-  setOGTypeArticle={setOGTypeArticle}
->
-  <!-- 文章结构化数据（仅文章页） -->
-  {jsonLd && (
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  )}
+<Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
-  <div class="flex flex-col min-h-screen">
-    <NavBar />
+    <!-- 内容距离统一为 5.5rem 顶部 -->
 
-    <div class="flex-1 flex flex-col lg:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
-      <main class="flex-1 min-w-0 py-8 lg:py-12">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-6">{h1Text}</h1>
-
-        <slot />
-      </main>
-
-      <aside class="lg:w-72 lg:ml-8 xl:ml-12 flex-shrink-0">
-        {headings && headings.length > 0 ? (
-          <TableOfContents headings={headings} />
-        ) : (
-          <SiteInfo />
-        )}
-      </aside>
+    <!-- Navbar -->
+    <slot slot="head" name="head"></slot>
+    <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
+        <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
+            <Navbar></Navbar>
+        </div>
     </div>
 
-    <Footer />
-  </div>
+    <!-- Banner (full-screen) -->
+    {siteConfig.banner.enable && <div id="banner-wrapper" class="fixed z-0 left-0 right-0 overflow-hidden transition duration-700 pointer-events-none" style="top:0;height:100vh;transform:none;">
+        <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover w-full h-full transition duration-700 opacity-100 scale-100 pointer-events-none"]}
+                      src={siteConfig.banner.src} position={siteConfig.banner.position} style="height:100%;transform:none;">
+        </ImageWrapper>
+    </div>}
+
+    <!-- Main content -->
+    <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
+        <!-- The pointer-events-none here prevent blocking the click event of the TOC -->
+        <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
+            <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
+                <!-- Banner image credit -->
+                {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
+                                       class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
+                                       "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
+                >
+                    <Icon class="text-white/75 text-[1.25rem] mr-1" name="material-symbols:copyright-outline-rounded"></Icon>
+                    <div class="text-white/75 text-xs">{siteConfig.banner.credit.text}</div>
+                    <Icon class:list={["transition absolute text-[oklch(0.75_0.14_var(--hue))] right-4 text-[0.75rem] opacity-0",
+                        {"group-hover:opacity-100": hasBannerLink}]}
+                          name="fa6-solid:arrow-up-right-from-square">
+                    </Icon>
+                </a>}
+
+
+                <SideBar class="mb-4 row-start-2 row-end-3 col-span-2 lg:row-start-1 lg:row-end-2 lg:col-span-1 lg:max-w-[17.5rem] onload-animation" headings={headings}></SideBar>
+
+                <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
+                    <div id="content-wrapper" class="onload-animation">
+                        <!-- ✅ 添加 H1 标签：使用传入的 title 作为页面主标题 -->
+                        {title && <h1 class="text-3xl sm:text-4xl font-bold mb-6">{title}</h1>}
+
+                        <slot></slot>
+                        <div class="footer col-span-2 onload-animation hidden lg:block">
+                            <Footer></Footer>
+                        </div>
+                    </div>
+                </main>
+
+                <div class="footer col-span-2 onload-animation block lg:hidden">
+                    <Footer></Footer>
+                </div>
+            </div>
+
+            <BackToTop></BackToTop>
+        </div>
+    </div>
+
+    <!-- The things that should be under the banner, only the TOC for now -->
+    <div class="absolute w-full z-0 hidden 2xl:block">
+        <div class="relative max-w-[var(--page-width)] mx-auto">
+            <!-- TOC component -->
+            {siteConfig.toc.enable && <div id="toc-wrapper" class:list={["hidden lg:block transition absolute top-0 -right-[var(--toc-width)] w-[var(--toc-width)] items-center",
+                    {"toc-hide": siteConfig.banner.enable}]}
+            >
+                <div id="toc-inner-wrapper" class="fixed top-14 w-[var(--toc-width)] h-[calc(100vh_-_20rem)] overflow-y-scroll overflow-x-hidden hide-scrollbar">
+                    <div id="toc" class="w-full h-full transition-swup-fade ">
+                        <div class="h-8 w-full"></div>
+                        <TOC headings={headings}></TOC>
+                        <div class="h-8 w-full"></div>
+                    </div>
+                </div>
+            </div>}
+
+            <!-- #toc needs to exist for Swup to work normally -->
+            {!siteConfig.toc.enable && <div id="toc"></div>}
+        </div>
+    </div>
 </Layout>
