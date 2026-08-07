@@ -7,7 +7,7 @@ import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
 
 const friendsPost = await getEntry('spec', 'friends')
-const { Content } = await friendsPost.render()
+const { Content } = await render(friendsPost)
 const items = [
     {
         title: 'Kelojonle',
