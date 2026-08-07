@@ -25,7 +25,7 @@ interface Props {
 }
 
 const {
-    title: propTitle,
+    title,
     banner,
     description,
     lang,
@@ -33,54 +33,14 @@ const {
     headings = [],
 } = Astro.props;
 
-function generateTitleFromPath(path: string): string {
-    const segments = path.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
-    const lastSegment = segments[segments.length - 1] || '';
-
-    if (path === '/' || path === '') {
-        return siteConfig.title;
-    }
-
-    const specialPages: Record<string, string> = {
-        'about': '关于我',
-        'archive': '文章归档',
-        'friends': '友情链接',
-        'disclaimer': '免责声明',
-        'search': '搜索',
-    };
-    if (specialPages[lastSegment]) {
-        return specialPages[lastSegment];
-    }
-
-    if (segments[0] === 'category' && segments[1]) {
-        return `分类：${segments[1]}`;
-    }
-
-    if (segments[0] === 'tag' && segments[1]) {
-        return `标签：${segments[1]}`;
-    }
-
-    if (segments[0] === 'page' && segments[1]) {
-        return `文章列表 - 第${segments[1]}页`;
-    }
-
-    if (lastSegment) {
-        return lastSegment
-            .replace(/-/g, ' ')
-            .replace(/\b\w/g, (c) => c.toUpperCase());
-    }
-
-    return siteConfig.title;
-}
-
-const finalTitle = propTitle || generateTitleFromPath(Astro.url.pathname);
-
 const hasBannerCredit = siteConfig.banner.enable && siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
+const mainPanelTop = "5.5rem";
 ---
 
-<Layout title={finalTitle} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
+<Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
+    <!-- Navbar -->
     <slot slot="head" name="head"></slot>
     <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
         <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
@@ -96,10 +56,10 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
     </div>}
 
     <!-- Main content -->
-    <div class="absolute w-full z-30 pointer-events-none" style={`top: 5.5rem`}>
+    <div class="absolute w-full z-30 pointer-events-none" style={`top: ${mainPanelTop}`}>
         <div class="relative max-w-[var(--page-width)] mx-auto pointer-events-auto">
             <div id="main-grid" class="transition duration-700 w-full left-0 right-0 grid grid-cols-[17.5rem_auto] grid-rows-[auto_1fr_auto] lg:grid-rows-[auto] mx-auto gap-4 px-0 md:px-4">
-                <!-- Banner image credit -->
+                <!-- Banner credit -->
                 {hasBannerCredit && <a href={siteConfig.banner.credit.url} id="banner-credit" target="_blank" rel="noopener" aria-label="Visit image source"
                                        class:list={["group onload-animation transition-all absolute flex justify-center items-center rounded-full " +
                                        "px-3 right-4 -top-[3.25rem] bg-black/60 hover:bg-black/70 h-9", {"hover:pr-9 active:bg-black/80": hasBannerLink}]}
@@ -116,7 +76,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 
                 <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
                     <div id="content-wrapper" class="onload-animation">
-                        <h1 class="text-3xl sm:text-4xl font-bold mb-6">{finalTitle}</h1>
+                        <!-- ⚠️ 原始版本：此处没有 H1 标签，只有 slot -->
                         <slot></slot>
                         <div class="footer col-span-2 onload-animation hidden lg:block">
                             <Footer></Footer>
@@ -133,7 +93,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
         </div>
     </div>
 
-    <!-- TOC 组件 -->
+    <!-- TOC (右侧目录) -->
     <div class="absolute w-full z-0 hidden 2xl:block">
         <div class="relative max-w-[var(--page-width)] mx-auto">
             {siteConfig.toc.enable && <div id="toc-wrapper" class:list={["hidden lg:block transition absolute top-0 -right-[var(--toc-width)] w-[var(--toc-width)] items-center",
