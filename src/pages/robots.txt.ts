@@ -3,12 +3,11 @@ import type { APIRoute } from "astro";
 const siteUrl = import.meta.env.SITE || 'https://baiblog.vip';
 
 const robotsTxt = `
-
 User-agent: *
+Allow: /
 Disallow: /_astro/
 
 Sitemap: ${siteUrl}/sitemap-index.xml
-Sitemap: ${siteUrl}/sitemap.xml
 `.trim();
 
 export const GET: APIRoute = () => {

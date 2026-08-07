@@ -38,6 +38,7 @@ layout: null
 <div class="half-full-container">
   <div class="card">
 
+# 免责声明
 
 ### 一、服务对象与地域限制
 

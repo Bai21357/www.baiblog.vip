@@ -70,6 +70,14 @@ const bannerOffsetByPosition = {
 };
 const bannerOffset =
 	bannerOffsetByPosition[siteConfig.banner.position || "center"];
+
+// canonical URL (absolute, strips query params)
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// default OG/Twitter share image (absolute URL)
+const ogImage = siteConfig.ogImage
+	? new URL(url(siteConfig.ogImage), Astro.site)
+	: undefined;
 ---
 
 <!DOCTYPE html>
@@ -83,11 +91,15 @@ const bannerOffset =
 		<meta charset="UTF-8" />
 		<meta name="description" content={description || pageTitle}>
 		<meta name="author" content={profileConfig.name}>
+		<meta name="robots" content="index, follow, max-image-preview:large" />
+		<link rel="canonical" href={canonicalURL} />
 
 		<meta property="og:site_name" content={siteConfig.title}>
-		<meta property="og:url" content={Astro.url}>
+		<meta property="og:url" content={canonicalURL}>
 		<meta property="og:title" content={pageTitle}>
 		<meta property="og:description" content={description || pageTitle}>
+		<meta property="og:locale" content={siteConfig.lang.replace("_", "-")}>
+		{ogImage && <meta property="og:image" content={ogImage}>}
 		{setOGTypeArticle ? (
         <meta property="og:type" content="article" />
         ) : (
@@ -95,11 +107,13 @@ const bannerOffset =
         )}
 
 		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:url" content={Astro.url}>
+		<meta property="twitter:url" content={canonicalURL}>
 		<meta name="twitter:title" content={pageTitle}>
 		<meta name="twitter:description" content={description || pageTitle}>
+		{ogImage && <meta name="twitter:image" content={ogImage}>}
 
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content={`oklch(0.9 0.05 ${siteConfig.themeColor.hue})`} />
 		<meta name="generator" content={Astro.generator} />
 		{favicons.map(favicon => (
 			<link rel="icon"

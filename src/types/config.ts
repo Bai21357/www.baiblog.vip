@@ -36,6 +36,9 @@ export type SiteConfig = {
 	};
 
 	favicon: Favicon[];
+
+	/** Default social share image (OG/Twitter), relative to /public, e.g. '/images/og.png' */
+	ogImage?: string;
 };
 
 export type Favicon = {

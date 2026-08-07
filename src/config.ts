@@ -38,6 +38,7 @@ export const siteConfig: SiteConfig = {
 		//   sizes: '534x534',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
 		// }
 	],
+	ogImage: "/images/5.png", // Default social share image, replace with a 1200x630 image for best results
 };
 
 export const navBarConfig: NavBarConfig = {

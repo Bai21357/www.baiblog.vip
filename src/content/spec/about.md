@@ -1,17 +1,13 @@
 # 关于我
 
-  个人主页 [Bili](https://space.bilibili.com/1634994344)
+个人主页 [Bili](https://space.bilibili.com/1634994344)
 
-
-  
 # 关于网站
 
-### <p>使用本站前请先查看<a href="/disclaimer/">用户协议</a>.</p>
+ <p>使用本站前请先查看<a href="/disclaimer/">用户协议</a>.</p>
 
-### 本网站资源下载站
+ 本网站资源下载站
 https://re.213578848.xyz/
-
-### 站史
 
   本网站域名于24年启用(主站)
 
