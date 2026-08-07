@@ -1,13 +1,13 @@
 ---
 title: 置顶帖
-published: 2099-12-14
+published: 2026-11-30
 description: '记录'
 tags: [Web]
 category: '记录'
 draft: false
 ---
-# 6.21
-## <p>使用本站前请先查看<a href="/disclaimer/">免责声明</a>.</p>
+
+## <p>使用本站前请先查看<a href="/disclaimer/">用户协议</a>.</p>
 
 ### 添加友链请在github提交pr
  位置 src/pages/friends.astro
@@ -20,9 +20,14 @@ draft: false
     tags: ['Friends'],
     },
 
+
 ## 本网站资源下载站
 
 https://re.213578848.xyz/
+
+## 通用换源脚本
+
+  bash <(curl -sSL https://linuxmirrors.cn/main.sh)
 
 ## markdown教程
 https://markdown.com.cn/
@@ -46,7 +51,6 @@ https://cover.keaeye.com/
 ![](https://im.213578848.xyz/zmd47.png)
 
 ![](https://im.213578848.xyz/1780619411.png)
-
 
 
 ### END

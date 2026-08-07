@@ -1,10 +1,14 @@
 import type { APIRoute } from "astro";
 
+const siteUrl = import.meta.env.SITE || 'https://baiblog.vip';
+
 const robotsTxt = `
+
 User-agent: *
 Disallow: /_astro/
 
-Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}
+Sitemap: ${siteUrl}/sitemap-index.xml
+Sitemap: ${siteUrl}/sitemap.xml
 `.trim();
 
 export const GET: APIRoute = () => {

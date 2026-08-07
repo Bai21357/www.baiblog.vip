@@ -6,12 +6,12 @@
   
 # 关于网站
 
-## <p>使用本站前请先查看<a href="/disclaimer/">免责声明</a>.</p>
+### <p>使用本站前请先查看<a href="/disclaimer/">用户协议</a>.</p>
 
-## 本网站资源下载站
+### 本网站资源下载站
 https://re.213578848.xyz/
 
-## 站史
+### 站史
 
   本网站域名于24年启用(主站)
 
@@ -27,9 +27,9 @@ https://re.213578848.xyz/
 
     baiblog.vip(托管到Cloudflare)
 
-    021357.xyz(托管到EdgeOne)
+    www.021357.xyz(托管到EdgeOne)
  
-    213578848.xyz(托管到Cloudflare)
+    www.213578848.xyz(托管到Cloudflare)
 
  ## 对网站有任何问题,请与我联系 
   

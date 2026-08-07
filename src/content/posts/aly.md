@@ -24,6 +24,4 @@ draft: false
 ### nginx前后配置文件对比
 ![1](https://im.213578848.xyz/aly/a3.png)
 
-~~(小声bb:这就是你跟我说的无备案解析绕过dpi)~~
-
 ## 灵感来源/具体分析 https://2x.nz/posts/aliyun-icp-tls-bug/

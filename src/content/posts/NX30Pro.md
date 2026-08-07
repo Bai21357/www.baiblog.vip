@@ -7,7 +7,7 @@ category: 'OpenWrt'
 draft: false
 ---
 
-## 目标:给NX30pro路由器刷入openwrt稳定运行
+_## 目标:给NX30pro路由器刷入openwrt稳定运行_
 
 ## 需要准备的
 
