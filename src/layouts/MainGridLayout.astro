@@ -16,7 +16,7 @@ import {
 import Layout from "./Layout.astro";
 
 interface Props {
-    title?: string;                 // 外部传入（文章页必须传）
+    title?: string;
     banner?: string;
     description?: string;
     lang?: string;
@@ -33,18 +33,14 @@ const {
     headings = [],
 } = Astro.props;
 
-// ========== 自动生成标题（当外部未传入 title 时使用） ==========
 function generateTitleFromPath(path: string): string {
-    // 去除首尾斜杠并按 / 分割
     const segments = path.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
     const lastSegment = segments[segments.length - 1] || '';
 
-    // 首页
     if (path === '/' || path === '') {
         return siteConfig.title;
     }
 
-    // 特定页面（预设中文标题）
     const specialPages: Record<string, string> = {
         'about': '关于我',
         'archive': '文章归档',
@@ -56,43 +52,35 @@ function generateTitleFromPath(path: string): string {
         return specialPages[lastSegment];
     }
 
-    // 分类页：路径如 /category/openwrt
     if (segments[0] === 'category' && segments[1]) {
         return `分类：${segments[1]}`;
     }
 
-    // 标签页：路径如 /tag/web
     if (segments[0] === 'tag' && segments[1]) {
         return `标签：${segments[1]}`;
     }
 
-    // 分页：路径如 /page/2
     if (segments[0] === 'page' && segments[1]) {
         return `文章列表 - 第${segments[1]}页`;
     }
 
-    // 其他：将最后一段转为可读标题（如 "hello-world" → "Hello World"）
     if (lastSegment) {
         return lastSegment
             .replace(/-/g, ' ')
             .replace(/\b\w/g, (c) => c.toUpperCase());
     }
 
-    // 兜底
     return siteConfig.title;
 }
 
-// 最终使用的标题（优先使用传入的 propTitle，否则自动生成）
 const finalTitle = propTitle || generateTitleFromPath(Astro.url.pathname);
 
-// 原有的 banner credit 相关变量（需要保留，原文件中有定义）
 const hasBannerCredit = siteConfig.banner.enable && siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
 ---
 
 <Layout title={finalTitle} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
-    <!-- 内容距离统一为 5.5rem 顶部 -->
     <slot slot="head" name="head"></slot>
     <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
         <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
@@ -128,7 +116,6 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 
                 <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
                     <div id="content-wrapper" class="onload-animation">
-                        <!-- ✅ 使用最终生成的 finalTitle 作为 H1 -->
                         <h1 class="text-3xl sm:text-4xl font-bold mb-6">{finalTitle}</h1>
                         <slot></slot>
                         <div class="footer col-span-2 onload-animation hidden lg:block">
