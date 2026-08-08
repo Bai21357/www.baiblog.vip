@@ -2,15 +2,13 @@
 
 >   基于 [Fuwari](https://github.com/saicaca/fuwari) 魔改的个人博客，使用 Astro 的现代化静态网页构建。
 
-![1](https://im.213578848.xyz/blog.png)
-
-
 [![Astro](https://img.shields.io/badge/Astro-7.2-ff5d01?logo=astro&logoColor=white)](https://astro.build)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Svelte](https://img.shields.io/badge/Svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
+![1](https://im.213578848.xyz/blog.png)
 在线访问：[https://baiblog.vip](https://baiblog.vip)
 
 ---
