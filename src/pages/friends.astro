@@ -33,8 +33,17 @@ const items = [
     },
 
 ]
+
 const shuffledItems = [...items]
     .sort(() => Math.random() - 0.5);
+
+const exampleCode = `{
+    title: '名字',
+    imgurl: 'https://xxxx.xx/xx.png',  #头像
+    desc: 'saying',
+    siteurl: '你的链接',
+    tags: ['Friends'],
+},`
 ---
 <MainGridLayout title={i18n(I18nKey.friends)} description={i18n(I18nKey.friends)}>
     <h1 class="sr-only">{i18n(I18nKey.friends)}</h1>
@@ -70,9 +79,17 @@ const shuffledItems = [...items]
                         </div>
                 ))}
             </div>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100 mt-8">花径不曾缘客扫，蓬门今始为君开</h2>
+            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 mt-2">欢迎！添加友链请在github提交pr</h4>
+            <p class="mt-2 text-sm">
+                <a href="https://github.com/Bai21357/www.baiblog.vip/blob/main/src/pages/friends.astro" title="友链文件" target="_blank" rel="noopener noreferrer" class="transition text-[var(--primary)] hover:underline">友链文件(github)</a>
+            </p>
+            <h4 class="font-medium text-neutral-900 dark:text-neutral-100 mt-4">代码示例</h4>
+            <pre class="rounded-[var(--radius-large)] bg-zinc-100 dark:bg-zinc-900 p-4 overflow-x-auto text-sm leading-relaxed text-neutral-800 dark:text-neutral-100 mt-2"><code>{exampleCode}</code></pre>
             <Markdown class="mt-2">
                 <Content />
             </Markdown>
         </div>
     </div>
 </MainGridLayout>
+
