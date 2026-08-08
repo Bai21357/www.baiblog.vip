@@ -23,6 +23,7 @@ enum I18nKey {
 
 	themeColor = "themeColor",
 	panelOpacity = "panelOpacity",
+	panelBlur = "panelBlur",
 
 	lightMode = "lightMode",
 	darkMode = "darkMode",

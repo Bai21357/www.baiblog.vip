@@ -25,6 +25,8 @@ export const id: Translation = {
 	[Key.postsCount]: "postingan",
 
 	[Key.themeColor]: "Warna Tema",
+	[Key.panelOpacity]: "Opasitas Panel",
+	[Key.panelBlur]: "Keburaman Latar",
 
 	[Key.lightMode]: "Terang",
 	[Key.darkMode]: "Gelap",

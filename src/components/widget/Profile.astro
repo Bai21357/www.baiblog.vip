@@ -40,7 +40,7 @@ const isExternal = redirectUrl.startsWith("http");
 
     <!-- 姓名和简介 -->
     <div class="mt-4 text-center">
-        <div class="text-lg font-medium">{config.name}</div>
+        <div class="text-lg font-medium text-90">{config.name}</div>
         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">{config.bio}</div>
     </div>
 
@@ -80,32 +80,45 @@ const isExternal = redirectUrl.startsWith("http");
 
                 if (liveStatus === 1) {
                     return `
-            <a href="https://live.bilibili.com/${roomId}" target="_blank" rel="noopener noreferrer" 
-               class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500 hover:bg-red-600 transition-colors text-white text-sm font-medium">
+            <a href="https://live.bilibili.com/${roomId}" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-1 py-1 rounded-full bg-transparent text-red-500 dark:text-red-400 text-sm font-medium transition-all hover:text-red-600 dark:hover:text-red-300 hover:scale-105 active:scale-95">
               <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
               </span>
-              🔴 ${escapeHtml(title)}
+              <span class="tracking-widest text-xs font-bold">LIVE</span>
+              <span class="max-w-[8rem] truncate">${escapeHtml(title)}</span>
             </a>
           `;
                 } else {
-                    return `<span class="text-gray-500 dark:text-gray-400 text-sm">⚫ 未开播</span>`;
+                    return `<span class="inline-flex items-center gap-1.5 px-1 py-1 rounded-full bg-transparent text-black/70 dark:text-white/75 text-sm">
+                <span class="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-400/80"></span>
+                未开播
+              </span>`;
                 }
             }
             // 房间不存在
             else if (result.code === 1 && result.msg === '未找到该房间') {
-                return `<span class="text-gray-500 dark:text-gray-400 text-sm">⚫ 未开播</span>`;
+                return `<span class="inline-flex items-center gap-1.5 px-1 py-1 rounded-full bg-transparent text-black/70 dark:text-white/75 text-sm">
+                <span class="h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-400/80"></span>
+                未开播
+              </span>`;
             }
             // 风控
             else if (result.code === -352) {
                 console.warn('[直播状态] B站风控 -352');
-                return `<span class="text-gray-500 dark:text-gray-400 text-sm">⚠️ 状态查询受限</span>`;
+                return `<span class="inline-flex items-center gap-1.5 px-1 py-1 rounded-full bg-transparent text-black/60 dark:text-amber-200/80 text-sm">
+                <span class="h-2 w-2 rounded-full bg-amber-400/80"></span>
+                状态查询受限
+              </span>`;
             }
             // 其他错误
             else {
                 console.error('[直播状态] 异常返回:', result);
-                return `<span class="text-gray-500 dark:text-gray-400 text-sm">⚠️ 接口异常</span>`;
+                return `<span class="inline-flex items-center gap-1.5 px-1 py-1 rounded-full bg-transparent text-black/60 dark:text-white/60 text-sm">
+                <span class="h-2 w-2 rounded-full bg-gray-400/70"></span>
+                接口异常
+              </span>`;
             }
         }
 
@@ -152,7 +165,10 @@ const isExternal = redirectUrl.startsWith("http");
             } catch (err) {
                 console.error('[直播状态] 请求失败:', err);
                 if (!localStorage.getItem(CACHE_KEY)) {
-                    const fallbackHtml = `<span class="text-gray-500 dark:text-gray-400 text-sm">⚠️ 状态获取失败</span>`;
+                    const fallbackHtml = `<span class="inline-flex items-center gap-1.5 px-1 py-1 rounded-full bg-transparent text-black/60 dark:text-white/60 text-sm">
+                <span class="h-2 w-2 rounded-full bg-gray-400/70"></span>
+                状态获取失败
+              </span>`;
                     if (fallbackHtml !== currentHtml) {
                         currentHtml = fallbackHtml;
                         container.innerHTML = fallbackHtml;

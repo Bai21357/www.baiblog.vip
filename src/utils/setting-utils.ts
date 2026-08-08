@@ -27,6 +27,42 @@ export function setHue(hue: number): void {
 	r.style.setProperty("--hue", String(hue));
 }
 
+export function getDefaultPanelOpacity(): number {
+	return 0.5;
+}
+
+export function getPanelOpacity(): number {
+	const stored = localStorage.getItem("panelOpacity");
+	return stored ? Number.parseFloat(stored) : getDefaultPanelOpacity();
+}
+
+export function setPanelOpacity(opacity: number): void {
+	localStorage.setItem("panelOpacity", String(opacity));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (!r) {
+		return;
+	}
+	r.style.setProperty("--panel-opacity", String(opacity));
+}
+
+export function getDefaultPanelBlur(): number {
+	return 3;
+}
+
+export function getPanelBlur(): number {
+	const stored = localStorage.getItem("panelBlur");
+	return stored ? Number.parseFloat(stored) : getDefaultPanelBlur();
+}
+
+export function setPanelBlur(blur: number): void {
+	localStorage.setItem("panelBlur", String(blur));
+	const r = document.querySelector(":root") as HTMLElement;
+	if (!r) {
+		return;
+	}
+	r.style.setProperty("--acrylic-blur", `${blur}px`);
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	switch (theme) {
 		case LIGHT_MODE:

@@ -25,6 +25,8 @@ export const ja: Translation = {
 	[Key.postsCount]: "件の投稿",
 
 	[Key.themeColor]: "テーマカラー",
+	[Key.panelOpacity]: "パネルの透明度",
+	[Key.panelBlur]: "背景のぼかし",
 
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",

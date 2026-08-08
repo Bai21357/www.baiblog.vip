@@ -25,6 +25,8 @@ export const tr: Translation = {
 	[Key.postsCount]: "gönderiler",
 
 	[Key.themeColor]: "Tema Rengi",
+	[Key.panelOpacity]: "Panel Opaklığı",
+	[Key.panelBlur]: "Arka Plan Bulanıklığı",
 
 	[Key.lightMode]: "Aydınlık",
 	[Key.darkMode]: "Koyu",

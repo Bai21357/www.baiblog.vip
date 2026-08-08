@@ -2,17 +2,49 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
-import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
+import {
+	getDefaultHue,
+	getDefaultPanelBlur,
+	getDefaultPanelOpacity,
+	getHue,
+	getPanelBlur,
+	getPanelOpacity,
+	setHue,
+	setPanelBlur,
+	setPanelOpacity,
+} from "@utils/setting-utils";
 
 let hue = getHue();
 const defaultHue = getDefaultHue();
+
+let panelOpacity = Math.round(getPanelOpacity() * 100);
+const defaultPanelOpacity = Math.round(getDefaultPanelOpacity() * 100);
+
+let panelBlur = getPanelBlur();
+const defaultPanelBlur = getDefaultPanelBlur();
 
 function resetHue() {
 	hue = getDefaultHue();
 }
 
+function resetPanelOpacity() {
+	panelOpacity = Math.round(getDefaultPanelOpacity() * 100);
+}
+
+function resetPanelBlur() {
+	panelBlur = getDefaultPanelBlur();
+}
+
 $: if (hue || hue === 0) {
 	setHue(hue);
+}
+
+$: if (panelOpacity) {
+	setPanelOpacity(panelOpacity / 100);
+}
+
+$: if (panelBlur !== undefined) {
+	setPanelBlur(panelBlur);
 }
 </script>
 
@@ -40,6 +72,52 @@ $: if (hue || hue === 0) {
     <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
         <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
                class="slider" id="colorSlider" step="5" style="width: 100%">
+    </div>
+
+    <div class="flex flex-row gap-2 mb-3 mt-4 items-center justify-between">
+        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]"
+        >
+            {i18n(I18nKey.panelOpacity)}
+            <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md  active:scale-90 will-change-transform"
+                    class:opacity-0={panelOpacity === defaultPanelOpacity} class:pointer-events-none={panelOpacity === defaultPanelOpacity} on:click={resetPanelOpacity}>
+                <div class="text-[var(--btn-content)]">
+                    <Icon icon="fa6-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
+                </div>
+            </button>
+        </div>
+        <div id="opacityValue" class="transition bg-[var(--btn-regular-bg)] w-12 h-7 rounded-md flex justify-center
+        font-bold text-sm items-center text-[var(--btn-content)]">
+            {panelOpacity}%
+        </div>
+    </div>
+    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+        <input aria-label={i18n(I18nKey.panelOpacity)} type="range" min="30" max="100" bind:value={panelOpacity}
+               class="slider" id="opacitySlider" step="5" style="width: 100%">
+    </div>
+
+    <div class="flex flex-row gap-2 mb-3 mt-4 items-center justify-between">
+        <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3
+            before:w-1 before:h-4 before:rounded-md before:bg-[var(--primary)]
+            before:absolute before:-left-3 before:top-[0.33rem]"
+        >
+            {i18n(I18nKey.panelBlur)}
+            <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md  active:scale-90 will-change-transform"
+                    class:opacity-0={panelBlur === defaultPanelBlur} class:pointer-events-none={panelBlur === defaultPanelBlur} on:click={resetPanelBlur}>
+                <div class="text-[var(--btn-content)]">
+                    <Icon icon="fa6-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
+                </div>
+            </button>
+        </div>
+        <div id="blurValue" class="transition bg-[var(--btn-regular-bg)] w-12 h-7 rounded-md flex justify-center
+        font-bold text-sm items-center text-[var(--btn-content)]">
+            {panelBlur}px
+        </div>
+    </div>
+    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+        <input aria-label={i18n(I18nKey.panelBlur)} type="range" min="0" max="40" bind:value={panelBlur}
+               class="slider" id="blurSlider" step="1" style="width: 100%">
     </div>
 </div>
 
@@ -90,4 +168,11 @@ $: if (hue || hue === 0) {
           &:active
             background rgba(255, 255, 255, 0.6)
 
+      #opacitySlider
+        background-image linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.9))
+        background-color transparent
+
+      #blurSlider
+        background-image linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2))
+        background-color transparent
 </style>
