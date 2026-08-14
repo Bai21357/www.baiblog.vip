@@ -42,6 +42,9 @@ export default defineConfig({
             updateHead: true,
             updateBodyClass: false,
             globalInstance: true,
+            // 免责声明页是独立页面（layout: null），没有 main/#toc 容器，跳过 swup 以避免容器不匹配导致跳转崩溃
+            // 注意：@swup/astro 使用 `ignore` 选项（而非 swup 原生 `ignoreVisit`）
+            ignore: "/disclaimer/",
         }),
         icon({
             include: {

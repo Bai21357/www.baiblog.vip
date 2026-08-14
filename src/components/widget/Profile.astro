@@ -2,7 +2,6 @@
 // src/components/widget/Profile.astro
 import { Icon } from "astro-icon/components";
 import { profileConfig } from "../../config";
-import { url } from "../../utils/url-utils";
 import ImageWrapper from "../misc/ImageWrapper.astro";
 
 const config = profileConfig;
@@ -27,7 +26,7 @@ const isExternal = redirectUrl.startsWith("http");
                   class="transition opacity-0 scale-90 group-hover:scale-100 group-hover:opacity-100 text-white text-5xl" />
         </div>
         <ImageWrapper
-                src={url(config.avatar)}
+                src={config.avatar}
                 alt={config.name}
                 class="w-32 h-32 lg:w-48 lg:h-48 rounded-full mx-auto object-cover"
                 position="center"
@@ -159,6 +158,10 @@ const isExternal = redirectUrl.startsWith("http");
         async function fetchAndUpdate() {
             try {
                 const response = await fetch(`/bili-api/room/v1/Room/get_info?room_id=${ROOM_ID}`);
+                // 接口不可用或返回错误页（HTML）时提前抛出，避免 JSON 解析报错
+                if (!response.ok) {
+                    throw new Error(`接口返回状态码 ${response.status}`);
+                }
                 const data = await response.json();
                 localStorage.setItem(CACHE_KEY, JSON.stringify(data));
                 renderLiveStatus(data);
