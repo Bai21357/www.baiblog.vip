@@ -1,7 +1,7 @@
 ---
 title: Markdown记录
 published: 2026-01-01
-description: '记录'
+description: 'MarkDown'
 tags: [Web]
 category: '记录'
 draft: false
@@ -90,8 +90,6 @@ https://www.baiblog.vip/
 :smile:
 $\theta=x^2$
 :joy:
-
-~~主播以后再也不发癫力~~
 
 
 

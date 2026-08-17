@@ -1,7 +1,7 @@
 ---
 title: 网站服务器被他人恶意解析的解决措施
 published: 2026-08-08
-description: 'web'
+description: '如何防止VPS被陌生域名解析'
 tags: [Web]
 category: 'nginx'
 draft: false

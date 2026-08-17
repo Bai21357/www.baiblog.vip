@@ -1,7 +1,7 @@
 ---
 title: ThinkPad E480 黑苹果EFI文件
 published: 2025-08-21
-description: 'web'
+description: '我的ThinkPadE480 EFI文件'
 tags: [Web]
 category: 'efi'
 draft: false

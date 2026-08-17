@@ -1,8 +1,8 @@
 ---
 title: DPI 深度包检测逃逸
 published: 2026-06-04
-description: 'web'
-tags: [Web]
+description: 'aliyun形同虚设的拦截机制'
+tags: [web]
 category: 'tls'
 draft: false
 ---

@@ -1,7 +1,7 @@
 ---
 title: 用OpenWrt软路由实现网关代理
 published: 2026-02-06
-description: 'web'
+description: 'OpenWrt网关代理'
 tags: [Web]
 category: 'OpenWrt'
 draft: false

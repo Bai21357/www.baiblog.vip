@@ -1,7 +1,7 @@
 ---
 title: NX30pro刷openwrt
 published: 2026-02-27
-description: 'web'
+description: 'Nx30pro刷入openwrt'
 tags: [Web]
 category: 'OpenWrt'
 draft: false
