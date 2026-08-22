@@ -18,7 +18,9 @@ export const siteConfig: SiteConfig = {
 
 	banner: {
 		enable: true,
-		src: "https://api.yppp.net/api.php", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+		// 保留远程随机图 API；?size=1920x1080 让服务端返回受限尺寸的图，
+		// 实测可将单张体积从 2~5MB 降到约 0.5~1MB（该接口尺寸参数仍随图变化，但远好于原始图）
+		src: "https://api.yppp.net/api.php?size=1920x1080",
 		position: "top", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
 			enable: false, // Display the credit text of the banner image

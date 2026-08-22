@@ -133,9 +133,18 @@ async function loadPagefind() {
     }
 }
 
+// 搜索索引体积较大，延迟到浏览器空闲时再加载，避免与首屏资源抢占带宽
+function loadPagefindWhenIdle() {
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadPagefind, { timeout: 3000 });
+    } else {
+        setTimeout(loadPagefind, 1000);
+    }
+}
+
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPagefind);
+    document.addEventListener('DOMContentLoaded', loadPagefindWhenIdle);
 } else {
-    loadPagefind();
+    loadPagefindWhenIdle();
 }
 </script>}

@@ -2,7 +2,7 @@
 title: 利用CloudflareR2实现免费图床
 published: 2026-02-08
 description: '教你如何白嫖cloudflareR2的免费对象存储'
-tags: [Web]
+tags: [Cloudflare]
 category: 'cloudflare'
 draft: false
 ---

@@ -51,8 +51,8 @@ const mainPanelTop = "5.5rem";
     <!-- Banner (full-screen) -->
     {siteConfig.banner.enable && <div id="banner-wrapper" class="fixed z-0 left-0 right-0 overflow-hidden transition duration-700 pointer-events-none" style="top:0;height:100vh;transform:none;">
         <ImageWrapper id="banner" alt="Banner image of the blog" class:list={["object-cover w-full h-full transition duration-700 opacity-100 scale-100 pointer-events-none"]}
-                      src={siteConfig.banner.src} position={siteConfig.banner.position} style="height:100%;transform:none;">
-        </ImageWrapper>
+                      src={siteConfig.banner.src} position={siteConfig.banner.position} style="height:100%;transform:none;"
+                      fetchpriority="high" decoding="async"></ImageWrapper>
     </div>}
 
     <!-- Main content -->

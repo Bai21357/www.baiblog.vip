@@ -9,12 +9,17 @@ interface Props {
 	position?: string;
 	style?: string;
 	basePath?: string;
+	width?: number;
+	height?: number;
+	fetchpriority?: "high" | "low" | "auto";
+	loading?: "lazy" | "eager";
+	decoding?: "sync" | "async" | "auto";
 }
 
 import { Image } from "astro:assets";
 import { url } from "../../utils/url-utils";
 
-const { id, src, alt, position = "center", basePath = "/", style = "" } = Astro.props;
+const { id, src, alt, position = "center", basePath = "/", style = "", width, height, fetchpriority, loading, decoding } = Astro.props;
 const className = Astro.props.class;
 
 const isLocal = !(
@@ -30,7 +35,8 @@ const isPublic = src.startsWith("/");
 // biome-ignore lint/suspicious/noImplicitAnyLet: <check later>
 let img;
 if (isLocal) {
-	const files = import.meta.glob<ImageMetadata>("../../**", {
+	// 只匹配图片文件，避免把 src 下所有 CSS/JS 也纳入模块图（导致多余的独立 CSS chunk）
+	const files = import.meta.glob<ImageMetadata>("../../**/*.{png,jpg,jpeg,webp,avif,gif,svg}", {
 		import: "default",
 	});
 	let normalizedPath = path
@@ -49,7 +55,7 @@ const imageClass = "w-full h-full object-cover";
 const imageStyle = `object-position: ${position}`;
 ---
 <div id={id} style={style} class:list={[className, 'overflow-hidden relative']}>
-	{isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle}/>}
-	{!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle}/>}
+	{isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle} {width} {height} fetchpriority={fetchpriority} loading={loading} decoding={decoding}/>}
+	{!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle} fetchpriority={fetchpriority} loading={loading} decoding={decoding} width={width} height={height}/>}
 	<div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none z-20"></div>
 </div>

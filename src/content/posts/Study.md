@@ -1,7 +1,7 @@
 ---
 title: Markdown记录
 published: 2026-01-01
-description: 'MarkDown'
+description: 'MarkDown模板,方便我写作时套用'
 tags: [Web]
 category: '记录'
 draft: false
@@ -16,7 +16,7 @@ draft: false
 #### 四级标题
 
 > 引用
-先辈啊先辈
+
  
 ## 有序列表
 1. 思考内容

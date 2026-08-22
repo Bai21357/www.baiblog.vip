@@ -2,6 +2,8 @@
 ---
 import path from "node:path";
 import { render } from "astro:content";
+// 公式样式只在文章页按需加载（首页/列表页不需要 KaTeX）
+import "katex/dist/katex.css";
 import License from "@components/misc/License.astro";
 import Markdown from "@components/misc/Markdown.astro";
 import I18nKey from "@i18n/i18nKey";

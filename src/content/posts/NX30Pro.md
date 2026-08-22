@@ -1,48 +1,68 @@
 ---
-title: NX30pro刷openwrt
+title: NX30Pro刷入OpenWrt教程
 published: 2026-02-27
-description: 'Nx30pro刷入openwrt'
-tags: [Web]
+description: 'H3C NX30Pro路由器刷入OpenWrt固件全流程'
+tags: [NX30pro]
 category: 'OpenWrt'
 draft: false
 ---
+免责:本文仅为个人记录,本文的部分设备固件和文章所涉及到的部分操作来源于这些教程  
 
-_## 目标:给NX30pro路由器刷入openwrt稳定运行_
+https://blog.csdn.net/weixin_45131306/article/details/157174340
+
+https://blog.qust.me/nx30pro
+
+## 目标:给NX30pro路由器刷入openwrt稳定运行
 
 ## 需要准备的
 
-1.把你的NX30pro开启telnet
+1.一台开启telnet的NX30pro
 
-2.软件:xshell winscp uboot.img 机器的的bin固件
+2.软件工具Xshell、WinSCP、Tftpd64
 
-#以上文件的下载链接放到了文章末尾
+3.固件文件uboot.img、OpenWrt 固件
+
+4.一台电脑
+
+### 所有所需文件的下载链接已整理在文末。
 
 ## 1.开启路由器的ssh
     
-1.先使用xshell连接到已经打开telent的NX30pro    
-地址192.168.124.1 用户名H3C 密码就是你路由器后台的密码 协议使用telnet
+### 1.1使用 Xshell 连接 Telnet
+
+先使用xshell连接到已经打开telent的NX30pro    
+
+地址:192.168.124.1 
+
+用户名:H3C
+
+密码:路由器后台的密码
+
+协议:telnet
 ![](https://im.213578848.xyz/nx30pro/x01.png)
 ![](https://im.213578848.xyz/nx30pro/x03.png)
-2.准备使用Tftpd64将dropbear.ipk文件上传到路由器的/TMP目录中
 
-首先搭建tftp服务器
+### 1.2搭建 TFTP 服务器
 
-先打开Ttfpd64软件
-,然后找到设置
+准备使用Tftpd64将dropbear.ipk文件上传到路由器的/TMP目录中
 
-在设置中只保留TFTP服务
+先打开Ttfpd64软件,找到设置,在服务选项卡仅勾选 TFTP 服务
 ![](https://im.213578848.xyz/nx30pro/x04.png)
-接着在TFTP目录中将目录设置为下载dropbear.ipk的目录
+
+接着在TFTP目录中将 根目录 设置为存放 dropbear.ipk 文件的文件夹
+
 ![](https://im.213578848.xyz/nx30pro/x05.png)
-最后将网卡设置为192.168.124.1,
+
+在网卡选项卡中将服务器IP绑定为 192.168.124.1
+
 ![](https://im.213578848.xyz/nx30pro/x06.png)
 此时你的tftp服务器就弄好了
 
-3.在telnet客户端中,使用tftp协议将文件下载到服务器
+### 1.3在telnet客户端中,使用tftp协议将文件下载到服务器并安装
 
-登录到你的路由器
+回到 Xshell 的 Telnet 终端,登录到你的路由器
 
-输入
+然后依次执行以下命令
     
     cd /tmp
 
@@ -50,29 +70,27 @@ _## 目标:给NX30pro路由器刷入openwrt稳定运行_
 
 ![](https://im.213578848.xyz/nx30pro/x07.png)
 
-看一眼Tftpd日志
+查看Tftpd日志
 
 ![](https://im.213578848.xyz/nx30pro/x08.png)
 
-这样就成功了
+如图所示即为成功
 
 
-接着在telnet客户端输入
+接着安装 dropbear
 
     opkg install /tmp/dropbear_2019.78-2_aarch64_cortex-a53.ipk
-
-安装ipk
 
 最后输入 
 
     /etc/init.d/dropbear enable
     /etc/init.d/dropbear start
 
-这样ssh就开启成功了(准备开始刷机)
+至此ssh就开启成功了(准备开始刷机)
 
 ## 2.将路由器刷入不死uboot并写入openwrt
 
-1.首先备份系统到tmp目录下
+### 2.1首先备份原厂固件至tmp目录下
     
 在telent客户端输入下面命令
 
@@ -81,11 +99,13 @@ _## 目标:给NX30pro路由器刷入openwrt稳定运行_
 然后打开WinSCP, 
 新建一个SCP协议的连接
 
-主机名192.168.124.1
+主机名:192.168.124.1
 
-端口号22 用户名H3C
+端口号:22 
 
-密码为你路由器后台设置的密码
+用户名:H3C
+
+密码:路由器后台设置的密码
 
 ![](https://im.213578848.xyz/nx30pro/x10.png)
 
@@ -96,29 +116,45 @@ _## 目标:给NX30pro路由器刷入openwrt稳定运行_
 完成备份
 
 
-2.刷入uboot
-将下载好的uboot.img文件上传到路由器的tmp目录下
+### 2.2刷入uboot
+
+使用 WinSCP 将下载好的uboot.img文件上传到路由器的/tmp目录下
 
 ![](https://im.213578848.xyz/nx30pro/x12.png)
 
-进入telnet终端
+进入Telnet终端
 输入指令
 
     mtd write /tmp/uboot.bin FIP
 
-随后将路由器断电,按住Reset恢复键,然后插电,等待10s左右松开
-路由器就进入了uboot 用网线连接到LAN1,在电脑配置好静态ip地址以连接到uboot
+等待刷写完成后
+
+1. 将路由器断电
+
+2. 用网线将电脑连接到路由器的LAN口
+
+3. 按住路由器背面的Reset复位键,同时插入电源
+
+4. 保持按住Reset键约10秒,直到指示灯闪烁后松开
 
 
-IP地址 192.168.1.2 网关 192.168.1.1 DNS 192.168.1.1 子网掩码点击自动填充
+配置连接电脑的静态IP
+
+IP地址 192.168.1.2 
+
+网关 192.168.1.1 
+
+DNS 192.168.1.1 
+
+子网掩码 255.255.255.0
 
 ![](https://im.213578848.xyz/nx30pro/x13.png)
 
-在浏览器输入 192.168.1.1 进入不死uboot界面
+在浏览器输入 192.168.1.1 即可看到U-Boot界面
 
 ![](https://im.213578848.xyz/nx30pro/x14.png)
 
-3.刷入openwrt
+### 3.刷入Openwrt固件
 
 上传下载好的openwrt固件,然后刷入
 
@@ -132,15 +168,14 @@ IP地址 192.168.1.2 网关 192.168.1.1 DNS 192.168.1.1 子网掩码点击自动
 
 ![](https://im.213578848.xyz/nx30pro/x16.png)
 
-## 如何刷回原来系统？
+## 如何刷回原原厂系统？
 
 同上述步骤,将路由器按住Reset恢复键,然后插电,等待10s左右松开
 
-再次进入uboot,上传你原来备份的镜像
+再次进入uboot,上传你原来备份的backup.img文件
 
-## 资料参考 
-    https://blog.csdn.net/weixin_45131306/article/details/157174340
-    https://blog.qust.me/nx30pro
+## 所需文件下载
+https://re.213578848.xyz/resources/NX30Pro
+
 
 ## END
-https://re.213578848.xyz/resources/NX30Pro
